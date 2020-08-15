@@ -3,13 +3,7 @@ import 'dart:convert';
 import 'package:notes/services/note.dart';
 
 class Data {
-  static List<Note> notes = [
-    Note(
-      title: 'Test Note',
-      text: 'Some test to test note with',
-      isDeleted: false,
-    )
-  ];
+  static List<Note> notes = [];
   static File file;
   static Directory dir;
   static String fileName = 'notes_file.json';

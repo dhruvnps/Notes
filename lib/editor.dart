@@ -28,6 +28,24 @@ class EditorState extends State<Editor> {
     super.dispose();
   }
 
+  void updateData({
+    String text,
+    String title,
+    bool isDeleted,
+  }) {
+    if (text != null) {
+      Data.notes[noteIndex].text = text;
+    }
+    if (title != null) {
+      Data.notes[noteIndex].title = title;
+    }
+    if (isDeleted != null) {
+      Data.notes[noteIndex].isDeleted = isDeleted;
+    }
+    Data.notes[noteIndex].dateModified = DateTime.now();
+    Data.writeToFile();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,8 +67,7 @@ class EditorState extends State<Editor> {
             IconButton(
               icon: Icon(Icons.delete_outline),
               onPressed: () {
-                Data.notes[noteIndex].isDeleted = true;
-                Data.writeToFile();
+                updateData(isDeleted: true);
                 Navigator.pop(context, true);
               },
             ),
@@ -71,8 +88,7 @@ class EditorState extends State<Editor> {
                 autofocus: Data.notes[noteIndex].title == '',
                 initialValue: Data.notes[noteIndex].title,
                 onChanged: (title) {
-                  Data.notes[noteIndex].title = title.trim();
-                  Data.writeToFile();
+                  updateData(title: title.trim());
                 },
                 onFieldSubmitted: (_) => focusNode.requestFocus(),
                 maxLines: 1,
@@ -94,8 +110,7 @@ class EditorState extends State<Editor> {
                   autofocus: Data.notes[noteIndex].title != '',
                   initialValue: Data.notes[noteIndex].text,
                   onChanged: (text) {
-                    Data.notes[noteIndex].text = text;
-                    Data.writeToFile();
+                    updateData(text: text);
                   },
                   maxLines: null,
                   textCapitalization: TextCapitalization.sentences,

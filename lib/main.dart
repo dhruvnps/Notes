@@ -30,7 +30,13 @@ class Home extends StatefulWidget {
 class HomeState extends State<Home> {
   void openNote({int noteIndex}) async {
     if (noteIndex == null) {
-      Data.notes.add(Note(title: "", text: "", isDeleted: false));
+      Data.notes.add(Note(
+        title: '',
+        text: '',
+        isDeleted: false,
+        dateCreated: DateTime.now(),
+        dateModified: DateTime.now(),
+      ));
     }
     var result = await Navigator.push(
       context,
