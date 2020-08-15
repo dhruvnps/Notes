@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:notes/services/theme.dart';
 import 'package:notes/services/data.dart';
+import 'package:notes/services/info_sheet.dart';
 
 class Editor extends StatefulWidget {
   final int noteIndex;
@@ -14,17 +15,21 @@ class EditorState extends State<Editor> {
   final int noteIndex;
   EditorState(this.noteIndex);
 
-  FocusNode focusNode;
+  FocusNode textFocusNode;
+  FocusNode titleFocusNode;
+  bool isInfoOpen = false;
 
   @override
   void initState() {
     super.initState();
-    focusNode = FocusNode();
+    textFocusNode = FocusNode();
+    titleFocusNode = FocusNode();
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    textFocusNode.dispose();
+    titleFocusNode.dispose();
     super.dispose();
   }
 
@@ -46,11 +51,26 @@ class EditorState extends State<Editor> {
     Data.writeToFile();
   }
 
+  void closeInfoOnTapOutside({FocusNode focusNode}) {
+    if (isInfoOpen) {
+      setState(() {
+        if (focusNode != null) {
+          focusNode.unfocus();
+        }
+        isInfoOpen = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context, true);
+        if (isInfoOpen) {
+          setState(() => isInfoOpen = false);
+        } else {
+          Navigator.pop(context, true);
+        }
         return false;
       },
       child: Scaffold(
@@ -62,7 +82,13 @@ class EditorState extends State<Editor> {
           actions: [
             IconButton(
               icon: Icon(Icons.info_outline),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  isInfoOpen = !isInfoOpen;
+                  textFocusNode.unfocus();
+                  titleFocusNode.unfocus();
+                });
+              },
             ),
             IconButton(
               icon: Icon(Icons.delete_outline),
@@ -85,12 +111,14 @@ class EditorState extends State<Editor> {
           child: Column(
             children: [
               TextFormField(
+                onTap: () => closeInfoOnTapOutside(),
                 autofocus: Data.notes[noteIndex].title == '',
+                focusNode: titleFocusNode,
                 initialValue: Data.notes[noteIndex].title,
                 onChanged: (title) {
                   updateData(title: title.trim());
                 },
-                onFieldSubmitted: (_) => focusNode.requestFocus(),
+                onFieldSubmitted: (_) => textFocusNode.requestFocus(),
                 maxLines: 1,
                 textCapitalization: TextCapitalization.sentences,
                 autocorrect: true,
@@ -106,8 +134,11 @@ class EditorState extends State<Editor> {
               ),
               Expanded(
                 child: TextFormField(
-                  focusNode: focusNode,
-                  autofocus: Data.notes[noteIndex].title != '',
+                  onTap: () =>
+                      closeInfoOnTapOutside(focusNode: textFocusNode),
+                  focusNode: textFocusNode,
+                  autofocus: Data.notes[noteIndex].title != '' &&
+                      Data.notes[noteIndex].text == '',
                   initialValue: Data.notes[noteIndex].text,
                   onChanged: (text) {
                     updateData(text: text);
@@ -124,6 +155,10 @@ class EditorState extends State<Editor> {
               ),
             ],
           ),
+        ),
+        bottomNavigationBar: InfoSheet(
+          isInfoOpen: isInfoOpen,
+          noteIndex: noteIndex,
         ),
       ),
     );
