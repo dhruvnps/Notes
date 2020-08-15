@@ -7,8 +7,8 @@ Color mainColor = Color(0xff40bf7a);
 
 Color fadedTextColor = Colors.grey[400];
 Color textColor = Colors.white;
-Color appBarColor = Colors.grey[850];
-Color backgroundColor = Colors.grey[900];
+Color appBarColor = Colors.grey[900];
+Color backgroundColor = Color(0xff191919);
 Color accentColor = Colors.grey[700];
 Color highlightColor = Color(0x10ffffff);
 Color splashColor = Color(0x15ffffff);
@@ -17,6 +17,7 @@ Color splashColor = Color(0x15ffffff);
 Color cursorColor = mainColor;
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
+  canvasColor: appBarColor,
   textSelectionHandleColor: mainColor,
   textSelectionColor: accentColor,
   highlightColor: highlightColor,
@@ -48,8 +49,9 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
     ),
 
     headline5: TextStyle(
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.normal,
       fontFamily: fontFamily,
+      letterSpacing: 2,
     ),
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
