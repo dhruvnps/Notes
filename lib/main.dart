@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -35,7 +34,7 @@ class HomeState extends State<Home> {
     }
     var result = await Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) {
+      MaterialPageRoute(builder: (context) {
         if (noteIndex == null) {
           noteIndex = Data.notes.length - 1;
         }
