@@ -34,7 +34,7 @@ class NoteWidget extends StatelessWidget {
               maxLines: 1,
               style: noteTitle() != null
                   ? Theme.of(context).textTheme.subtitle1
-                  : Theme.of(context).textTheme.bodyText2,
+                  : Theme.of(context).textTheme.bodyText1,
             ),
             noteText() != null
                 ? Column(
