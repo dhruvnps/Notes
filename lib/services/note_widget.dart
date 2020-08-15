@@ -29,7 +29,7 @@ class NoteWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              noteTitle() != null ? noteTitle() : 'new note',
+              noteTitle() != null ? noteTitle() : 'untitled',
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
               style: noteTitle() != null
