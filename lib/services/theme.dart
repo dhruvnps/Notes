@@ -31,8 +31,15 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
       fontFamily: fontFamily,
     ),
 
-    // italicised subtitle1
+    // NOTE: default for editor info tab text
     bodyText2: TextStyle(
+      color: textColor,
+      fontSize: 16,
+      fontFamily: fontFamily,
+    ),
+
+    // italicised subtitle1
+    bodyText1: TextStyle(
       color: textColor,
       fontSize: 16,
       fontWeight: FontWeight.normal,
