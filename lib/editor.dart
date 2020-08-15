@@ -14,6 +14,20 @@ class EditorState extends State<Editor> {
   final int noteIndex;
   EditorState(this.noteIndex);
 
+  FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -36,6 +50,7 @@ class EditorState extends State<Editor> {
               icon: Icon(Icons.delete_outline),
               onPressed: () {
                 Data.notes[noteIndex].isDeleted = true;
+                Data.writeToFile();
                 Navigator.pop(context, true);
               },
             ),
@@ -53,11 +68,13 @@ class EditorState extends State<Editor> {
           child: Column(
             children: [
               TextFormField(
+                autofocus: Data.notes[noteIndex].title == '',
                 initialValue: Data.notes[noteIndex].title,
                 onChanged: (title) {
                   Data.notes[noteIndex].title = title.trim();
                   Data.writeToFile();
                 },
+                onFieldSubmitted: (_) => focusNode.requestFocus(),
                 maxLines: 1,
                 textCapitalization: TextCapitalization.sentences,
                 autocorrect: true,
@@ -73,6 +90,8 @@ class EditorState extends State<Editor> {
               ),
               Expanded(
                 child: TextFormField(
+                  focusNode: focusNode,
+                  autofocus: Data.notes[noteIndex].title != '',
                   initialValue: Data.notes[noteIndex].text,
                   onChanged: (text) {
                     Data.notes[noteIndex].text = text;
