@@ -105,10 +105,12 @@ class HomeState extends State<Home> {
         ],
       ),
       drawer: SideNav(this),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => openNote(),
-        child: Icon(Icons.add),
-      ),
+      floatingActionButton: !isTrash
+          ? FloatingActionButton(
+              onPressed: () => openNote(),
+              child: Icon(Icons.add),
+            )
+          : SizedBox.shrink(),
       body: Container(
         child: Data.notes
                 .where((note) =>
