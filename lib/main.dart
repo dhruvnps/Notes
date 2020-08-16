@@ -8,6 +8,7 @@ import 'package:notes/services/data.dart';
 import 'package:notes/services/note.dart';
 import 'package:notes/services/note_widget.dart';
 import 'package:notes/services/theme.dart';
+import 'package:notes/services/side_nav.dart';
 import 'package:notes/editor.dart';
 
 void main() {
@@ -28,6 +29,15 @@ class Home extends StatefulWidget {
 }
 
 class HomeState extends State<Home> {
+  static bool isTrash = false;
+
+  List<String> trashOptions = ['Empty Trash'];
+  void trashOptionAction(String option) {
+    if (option == 'Empty Trash') {
+      setState(() => Data.emptyTrash());
+    }
+  }
+
   void openNote({int noteIndex}) async {
     if (noteIndex == null) {
       Data.notes.add(Note(
@@ -48,9 +58,7 @@ class HomeState extends State<Home> {
       }),
     );
     if (result) {
-      setState(() {
-        Data.removeEmptyNotes();
-      });
+      setState(() => Data.removeEmptyNotes());
     }
   }
 
@@ -74,34 +82,59 @@ class HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Notes',
+          isTrash ? 'Trash' : 'Notes',
           style: Theme.of(context).textTheme.headline5,
         ),
+        actions: [
+          isTrash
+              ? PopupMenuButton<String>(
+                  onSelected: trashOptionAction,
+                  itemBuilder: (BuildContext context) {
+                    return trashOptions.map((option) {
+                      return PopupMenuItem(
+                        value: option,
+                        child: Text(option),
+                      );
+                    }).toList();
+                  },
+                )
+              : IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () {},
+                ),
+        ],
       ),
-      drawer: Drawer(),
+      drawer: SideNav(this),
       floatingActionButton: FloatingActionButton(
         onPressed: () => openNote(),
         child: Icon(Icons.add),
       ),
       body: Container(
-        child: Data.notes.where((note) => !note.isDeleted).length > 0
+        child: Data.notes
+                .where((note) =>
+                    note.isDeleted == isTrash &&
+                    !Data.isNoteEmpty(note))
+                .isNotEmpty
             ? ListView.builder(
                 itemCount: Data.notes.length,
                 itemBuilder: (context, index) {
-                  return Data.notes[index].isDeleted
-                      ? SizedBox.shrink()
-                      : Column(
+                  return Data.notes[index].isDeleted == isTrash &&
+                          !Data.isNoteEmpty(Data.notes[index])
+                      ? Column(
                           crossAxisAlignment:
                               CrossAxisAlignment.stretch,
                           children: [
                             InkWell(
-                              onTap: () => openNote(noteIndex: index),
+                              onTap: isTrash
+                                  ? null
+                                  : () => openNote(noteIndex: index),
                               onLongPress: () => print('long press'),
                               child: NoteWidget(Data.notes[index]),
                             ),
                             Divider(height: 0),
                           ],
-                        );
+                        )
+                      : SizedBox.shrink();
                 },
               )
             : Center(
@@ -109,12 +142,12 @@ class HomeState extends State<Home> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.note_add,
+                      isTrash ? Icons.delete : Icons.note_add,
                       size: 100,
                       color: Colors.grey[800],
                     ),
                     Text(
-                      'Create\nnote',
+                      isTrash ? 'Nothing\nhere' : 'Create\nnote',
                       style: TextStyle(color: Colors.grey[800]),
                       textAlign: TextAlign.center,
                     ),

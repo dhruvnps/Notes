@@ -29,10 +29,23 @@ class Data {
     file.writeAsStringSync(json.encode(notes));
   }
 
+  static bool isNoteEmpty(Note note) {
+    return notes
+        .where((note) =>
+            note.title.trim() != '' || note.text.trim() != '')
+        .isEmpty;
+  }
+
   static void removeEmptyNotes() {
     notes = notes
         .where((note) =>
-            (note.title.trim() != '' || note.text.trim() != ''))
+            note.title.trim() != '' || note.text.trim() != '')
         .toList();
+    writeToFile();
+  }
+
+  static void emptyTrash() {
+    notes = notes.where((note) => !note.isDeleted).toList();
+    writeToFile();
   }
 }

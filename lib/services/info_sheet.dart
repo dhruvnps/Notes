@@ -32,7 +32,10 @@ class InfoSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Words'),
+                  Text(
+                    'Words',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
                   Text(
                     Data.notes[noteIndex].text
                         .replaceAll('\n', ' ')
@@ -40,6 +43,7 @@ class InfoSheet extends StatelessWidget {
                         .where((word) => word != '')
                         .length
                         .toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
                   ),
                 ],
               ),
@@ -48,7 +52,10 @@ class InfoSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Characters'),
-                  Text(Data.notes[noteIndex].text.length.toString()),
+                  Text(
+                    Data.notes[noteIndex].text.length.toString(),
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
                 ],
               ),
               SizedBox(height: infoPadding),
@@ -58,6 +65,7 @@ class InfoSheet extends StatelessWidget {
                   Text('Modified'),
                   Text(
                     format.format(Data.notes[noteIndex].dateModified),
+                    style: Theme.of(context).textTheme.bodyText2,
                   )
                 ],
               ),
@@ -68,6 +76,7 @@ class InfoSheet extends StatelessWidget {
                   Text('Created'),
                   Text(
                     format.format(Data.notes[noteIndex].dateCreated),
+                    style: Theme.of(context).textTheme.bodyText2,
                   )
                 ],
               ),

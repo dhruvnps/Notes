@@ -31,7 +31,6 @@ ThemeData darkTheme = ThemeData.dark().copyWith(
       fontFamily: fontFamily,
     ),
 
-    // NOTE: default for editor info tab text
     bodyText2: TextStyle(
       color: textColor,
       fontSize: 16,
