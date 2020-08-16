@@ -30,10 +30,7 @@ class Data {
   }
 
   static bool isNoteEmpty(Note note) {
-    return notes
-        .where((note) =>
-            note.title.trim() != '' || note.text.trim() != '')
-        .isEmpty;
+    return note.title.trim() == '' && note.text.trim() == '';
   }
 
   static void removeEmptyNotes() {
