@@ -58,7 +58,7 @@ class HomeState extends State<Home> {
       }),
     );
     if (result) {
-      setState(() => Data.removeEmptyNotes());
+      setState(() {});
     }
   }
 
@@ -70,7 +70,10 @@ class HomeState extends State<Home> {
       Data.file = File(dir.path + '/' + Data.fileName);
       Data.fileExists = Data.file.existsSync();
       if (Data.fileExists) {
-        setState(() => Data.readFileToList());
+        setState(() {
+          Data.readFileToList();
+          Data.removeEmptyNotes();
+        });
       } else {
         Data.createFile();
       }
