@@ -62,6 +62,39 @@ class HomeState extends State<Home> {
     }
   }
 
+  void showTrashDialog({int noteIndex}) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+          'Restore Note?',
+          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                fontSize: 20,
+              ),
+        ),
+        actions: [
+          FlatButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'No',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+          FlatButton(
+            onPressed: () {
+              Navigator.pop(context);
+              setState(() => Data.notes[noteIndex].isDeleted = false);
+            },
+            child: Text(
+              'Yes',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,7 +164,8 @@ class HomeState extends State<Home> {
                           children: [
                             InkWell(
                               onTap: isTrash
-                                  ? null
+                                  ? () => showTrashDialog(
+                                      noteIndex: index)
                                   : () => openNote(noteIndex: index),
                               onLongPress: () => print('long press'),
                               child: NoteWidget(Data.notes[index]),
