@@ -48,7 +48,7 @@ class HomeState extends State<Home> {
         dateModified: DateTime.now(),
       ));
     }
-    var result = await Navigator.push(
+    bool result = await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) {
         if (noteIndex == null) {

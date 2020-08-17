@@ -62,6 +62,13 @@ class EditorState extends State<Editor> {
     }
   }
 
+  void closeEditor({bool deleteNote}) {
+    if (deleteNote != null && deleteNote == true) {
+      updateData(isDeleted: true);
+    }
+    Navigator.pop(context, true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -69,7 +76,7 @@ class EditorState extends State<Editor> {
         if (isInfoOpen) {
           setState(() => isInfoOpen = false);
         } else {
-          Navigator.pop(context, true);
+          closeEditor();
         }
         return false;
       },
@@ -77,7 +84,7 @@ class EditorState extends State<Editor> {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => closeEditor(),
           ),
           actions: [
             IconButton(
@@ -92,10 +99,7 @@ class EditorState extends State<Editor> {
             ),
             IconButton(
               icon: Icon(Icons.delete_outline),
-              onPressed: () {
-                updateData(isDeleted: true);
-                Navigator.pop(context, true);
-              },
+              onPressed: () => closeEditor(deleteNote: true),
             ),
             IconButton(
               icon: Icon(Icons.more_vert),
